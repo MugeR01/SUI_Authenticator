@@ -3,16 +3,11 @@ module sui_authenticator::authenticator {
     use std::string;
     use std::vector;
 
-    use sui::url::{Self, Url};
     use sui::object::{Self, ID, UID};
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
 
     use sui::event::emit;
-
-
-    use sui::package;
-    use sui::display;
 
     // resource Addresses {
     //     addresses: vector<address>;
@@ -29,8 +24,6 @@ module sui_authenticator::authenticator {
 
     struct ApprovedManufacturers has key {
         id : UID,
-        listOfManufacturers : vector<address>,
-        size : u64
     }
 
     // structure to show the status of the NFT, whether it is in the process of being sold or not
@@ -87,8 +80,6 @@ module sui_authenticator::authenticator {
     public entry fun create_NFT(
         _manuCap : &ManuCapabilities,
         _name: vector<u8>,
-        description: vector<u8>,
-        url: vector<u8>,
         _collection_number : u64,
         ctx: &mut TxContext
     ){
@@ -139,10 +130,7 @@ module sui_authenticator::authenticator {
 
     public entry fun manufacturer_add(_cap : &AdminCapabilities,
                                 manufacturer : address, 
-                                company_name : vector<u8>, 
                                 ctx : &mut TxContext) {
-
-        let sender = tx_context::sender(ctx);
 
         transfer::transfer(ManuCapabilities {
             id: object::new(ctx)
